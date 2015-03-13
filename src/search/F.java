@@ -45,71 +45,40 @@ public class F {
 
     public void solve() throws IOException {
         String pattern = in.nextString();
-        ArrayList<Integer> zf = zFunction(pattern);
+        int[] prefix = prefix(pattern + pattern);
+
         int n = pattern.length();
 
+        int pos = 2 * n;
 
-        int min = zf.get(n);
-        zf.remove(n);
-
-        Collections.sort(zf, Comparator.<Integer>reverseOrder());
-
-        if (zf.get(n - 1) == 1) {
-            out.print(1);
-            return;
-        }
-
-
-        if (n % min != 0) {
-            out.print(n);
-            return;
-        }
-
-
-        for (int i = 1; i < n / min; i++) {
-            if (zf.get(i) != zf.get(i - 1) - min) {
-                out.print(n);
-                return;
+        for (int i = 0; i < 2 * n; i++) {
+            if (prefix[i] >= n) {
+                pos = i;
+                break;
             }
         }
 
+        if (pos < 2 * n) {
+            out.print(pos - prefix[pos] + 1);
+            return;
+        }
 
-        out.print(min);
+        out.print(n);
     }
 
-    ArrayList<Integer> zFunction(String str) {
-        int n = str.length();
-
-        ArrayList<Integer> zf = new ArrayList<>();
-        for (int i = 0; i < n + 1; i++) {
-            zf.add(0);
+    int[] prefix(String str) {
+        int[] prefix = new int[str.length()];
+        for (int i = 1; i < str.length(); i++) {
+            int k = prefix[i - 1];
+            while (k > 0 && str.charAt(i) != str.charAt(k)) {
+                k = prefix[k -1];
+            }
+            if (str.charAt(i) == str.charAt(k)) {
+                k++;
+            }
+            prefix[i] = k;
         }
-        zf.set(0, n);
-
-        int min = n;
-
-        int left = 0;
-        int right = 0;
-
-        for (int i = 1; i < n; i++) {
-            zf.set(i, Math.max(0, Math.min(right - i, zf.get(i - left))));
-            while (i + zf.get(i) < n && str.charAt(zf.get(i)) == str.charAt(i + zf.get(i))) {
-                zf.set(i, zf.get(i) + 1);
-
-            }
-
-            if (zf.get(i) < min && zf.get(i) != 0 && zf.get(i) != 1) {
-                min = zf.get(i);
-            }
-
-            if (i + zf.get(i) >= right) {
-                left = i;
-                right = i + zf.get(i);
-            }
-        }
-
-        zf.set(n, min);
-        return zf;
+        return prefix;
     }
 
 
