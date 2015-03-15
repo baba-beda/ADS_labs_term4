@@ -48,15 +48,15 @@ public class E {
         int txtLen = t.length();
         ArrayList<Integer> ans = new ArrayList<>();
 
-        int[] normalPrefix = prefix(p.toString() + "#" + t.toString());
+        int[] normalZf = zFunction(p.toString() + "#" + t.toString());
 
-        int[] reversedPrefix = prefix(p.reverse().toString() + "#" + t.reverse().toString());
+        int[] reversedZf = zFunction(p.reverse().toString() + "#" + t.reverse().toString());
 
-        for (int i = patLen + 1; i <= txtLen + patLen; i++) {
-            int j = txtLen + 2 * patLen  - i + 1;
+        for (int i = 0; i <= txtLen - patLen; i++) {
+            int j = patLen + txtLen + 1 - patLen - i;
 
-            if (normalPrefix[j]  + reversedPrefix[i] >= patLen - 1) {
-                ans.add(txtLen + patLen - j);
+            if (normalZf[i + patLen + 1]  + reversedZf[j] >= patLen - 1) {
+                ans.add(i + 1);
             }
         }
         out.println(ans.size());
@@ -65,20 +65,26 @@ public class E {
         }
     }
 
-    int[] prefix(String str) {
-        int[] prefix = new int[str.length()];
+    int[] zFunction(String str) {
+        int[] zf = new int[str.length()];
+
+        int left = 0;
+        int right = 0;
+
         for (int i = 1; i < str.length(); i++) {
-            int k = prefix[i - 1];
-            while (k > 0 && str.charAt(i) != str.charAt(k)) {
-                k = prefix[k -1];
+            zf[i] = Math.max(0, Math.min(right - i, zf[i - left]));
+            while (i + zf[i] < str.length() && str.charAt(zf[i]) == str.charAt(i + zf[i])) {
+                zf[i]++;
             }
-            if (str.charAt(i) == str.charAt(k)) {
-                k++;
+            if (i + zf[i] >= right) {
+                left = i;
+                right = i + zf[i];
             }
-            prefix[i] = k;
         }
-        return prefix;
+
+        return zf;
     }
+
 
     public void run() {
         try {
