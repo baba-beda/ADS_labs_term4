@@ -8,6 +8,37 @@ import java.util.HashMap;
  * Created by daria on 31.03.15.
  */
 public class A {
+    FastScanner in;
+    PrintWriter out;
+
+    public static void main(String[] args) {
+        new A().run();
+    }
+
+    public void solve() throws IOException {
+        Trie trie = new Trie(in.nextString());
+
+        out.println(trie.number + " " + (trie.number - 1));
+
+        for (Edge e : trie.edges) {
+            out.println(e.from + " " + e.to + " " + e.c);
+        }
+    }
+
+
+    public void run() {
+        try {
+            in = new FastScanner(new File("trie.in"));
+            out = new PrintWriter("trie.out");
+
+            solve();
+
+            out.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     class FastScanner {
         StreamTokenizer st;
 
@@ -34,37 +65,6 @@ public class A {
         }
     }
 
-    FastScanner in;
-    PrintWriter out;
-
-    public void solve() throws IOException {
-        Trie trie = new Trie(in.nextString());
-
-        out.println(trie.number + " " + (trie.number - 1));
-
-        for (Edge e : trie.edges) {
-            out.println(e.from + " " + e.to + " " + e.c);
-        }
-    }
-
-
-        public void run() {
-            try {
-                in = new FastScanner(new File("trie.in"));
-                out = new PrintWriter("trie.out");
-
-                solve();
-
-                out.flush();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public static void main(String[] args) {
-        new A().run();
-    }
-
     @SuppressWarnings("unchecked")
     class Trie {
         HashMap<Character, Integer>[] trie;
@@ -76,7 +76,7 @@ public class A {
         Trie(String s) {
             str = new StringBuilder(s);
             strLength = str.length();
-            trie = new HashMap[strLength*strLength];
+            trie = new HashMap[strLength * strLength];
             for (int i = 0; i < strLength * strLength; i++) {
                 trie[i] = new HashMap<>();
             }
@@ -106,7 +106,7 @@ public class A {
         }
     }
 
-    class Edge implements Comparable<Edge>{
+    class Edge implements Comparable<Edge> {
         int to, from;
         char c;
 
