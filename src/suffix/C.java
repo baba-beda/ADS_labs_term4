@@ -52,25 +52,6 @@ public class C {
         }
     }
 
-    void setNumbers(Tree.Node node) {
-        node.number = count++;
-
-        for (int i = 0; i < node.children.length; i++) {
-            if (node.children[i] != null) {
-                setNumbers(node.children[i]);
-            }
-        }
-    }
-
-    void getEdges(Tree.Node node) {
-        for (int i = 0; i < node.children.length; i++) {
-            if (node.children[i] != null) {
-                edges.add(new Edge(node.number, node.children[i].number, node.children[i].begin + 1, node.children[i].end));
-                getEdges(node.children[i]);
-            }
-        }
-    }
-
     void setOutput(Tree.Node node) {
         for (int i = 0; i < 26; i++) {
             if (node.children[i] != null) {
