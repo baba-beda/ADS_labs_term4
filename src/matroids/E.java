@@ -1,7 +1,10 @@
 package matroids;
 
+import javax.lang.model.element.Element;
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
 
 /**
  * Created by daria on 05.05.15.
@@ -38,9 +41,9 @@ public class E {
 
     public void solve() throws IOException {
         int n = in.nextInt(), m = in.nextInt();
-        int[] weights = new int[n];
+        Element[] weight = new Element[n];
         for (int i = 0; i < n; i++) {
-            weights[i] = in.nextInt();
+            weight[i] = new Element(i, in.nextInt());
         }
         int[] pows = new int[n];
         pows[0] = 1;
@@ -60,11 +63,40 @@ public class E {
             masks.add(mask);
         }
 
+        Arrays.sort(weight);
 
-        
+        int mainMask = 0;
+        long ans = 0;
+
+        for (int i = 0; i < n; i++) {
+            int j = 0;
+            while (j < m && ((mainMask + pows[weight[i].index]) & masks.get(j)) != masks.get(j)) {
+                j++;
+            }
+
+            if (j == m) {
+                mainMask += pows[weight[i].index];
+                ans += weight[i].weight;
+            }
+        }
+
+        out.print(ans);
 
     }
 
+    class Element implements Comparable<Element> {
+        int index, weight;
+
+        public Element(int index, int weight) {
+            this.index = index;
+            this.weight = weight;
+        }
+
+        @Override
+        public int compareTo(Element o) {
+            return Integer.compare(o.weight, this.weight);
+        }
+    }
     public void run() {
         try {
             in = new FastScanner(new File("cycles" + ".in"));
