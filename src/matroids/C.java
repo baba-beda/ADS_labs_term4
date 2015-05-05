@@ -53,19 +53,18 @@ public class C {
         }
         Arrays.sort(order);
 
-        int secNumber = 0;
 
         for (int i = 0; i < n; i++) {
             graph[i] = new ArrayList<>();
             int k = in.nextInt();
             for (int j = 0; j < k; j++) {
                 int v = in.nextInt() - 1;
-                secNumber = Math.max(v + 1, secNumber);
+
                 graph[i].add(v);
             }
         }
-        
-        matching = new int[secNumber];
+
+        matching = new int[n];
         Arrays.fill(matching, -1);
 
         for (int i = 0; i < n; i++) {
@@ -73,9 +72,15 @@ public class C {
             Arrays.fill(used, false);
             kuhn(v);
         }
+        int[] ans = new int[n];
+        for (int i = 0; i < n; i++) {
+            if (matching[i] != -1) {
+                ans[matching[i]] = i + 1;
+            }
+        }
 
-        for (int i = 0; i < secNumber; i++) {
-            out.print((matching[i] + 1) + " ");
+        for (int i = 0; i < n; i++) {
+            out.print(ans[i] + " ");
         }
     }
 
